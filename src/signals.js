@@ -60,20 +60,24 @@ export async function postSignal(req, reply) {
   });
 }
 
+} // closes postSignal
+
 export async function getSignals(req, reply) {
   const { userId, limit = 20 } = req.query || {};
-  if (!userId) return reply.code(400).send({ error: 'missing_userId' });
+
+  if (!userId) {
+    return reply.code(400).send({ error: 'missing_userId' });
+  }
+
   const lim = Math.min(Number(limit) || 20, 100);
+
   try {
     const rows = await listSignals(userId, lim);
     return { items: rows };
   } catch (e) {
     req.log.error({ err: e, ctx: 'listSignals' });
-      return reply.code(503).send({
-    error: 'db_unavailable'
-  });
+    return reply.code(503).send({
+      error: 'db_unavailable'
+    });
+  }
 }
-
-} // closes postSignal
-
-export async function getSignals(req, reply) {
