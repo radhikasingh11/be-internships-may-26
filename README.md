@@ -32,3 +32,32 @@ Build a minimal production-leaning service that can **handle load**, **rate limi
 - **Scale Plan (10k RPS):** Fill `SCALE.md` with a clear, concise approach (indexes, pooling, caching, queues, horizontal scale, idempotency store).
 
 > We will run additional **hidden concurrency/multi-instance tests** during evaluation.
+>
+> ## Solution Summary
+
+### Implemented Features
+
+- Per-user rate limiting using a fixed-window limiter.
+- Idempotent signal creation using a database-level unique constraint on `idempotency_key`.
+- Duplicate requests with the same `Idempotency-Key` return the existing resource.
+- Retry mechanism with exponential backoff and jitter for transient database failures.
+- Signal retrieval with configurable limits.
+- Health check endpoint.
+
+### Running the Service
+
+npm install
+npm run dev
+
+### Running Tests
+
+npm test
+
+### Scale Considerations
+
+See `SCALE.md` for:
+- Multi-instance idempotency
+- Distributed rate limiting
+- Observability
+- Failure handling
+- 10k RPS architecture approach
